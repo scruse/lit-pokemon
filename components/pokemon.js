@@ -1,18 +1,21 @@
-import {LitElement, html, css} from 'lit';
-import './pokemon-details.js';
-import './pokemon-list.js';
+import { LitElement, html, css } from "lit";
+import "./pokemon-details.js";
+import "./pokemon-list.js";
 
 export class Pokemon extends LitElement {
   static properties = {
-    pokemon: {type: Object},
-    pokemons: {type: Array},
+    pokemon: { type: Object },
+    pokemons: { type: Array },
   };
 
   static styles = css`
+    .content-wrapper {
+      display: flex;
+    }
     .column {
       display: flex;
       flex-direction: column;
-      width: 50%;
+      width: 20%;
     }
   `;
 
@@ -27,7 +30,7 @@ export class Pokemon extends LitElement {
   }
 
   async fetchPokemons() {
-    const res = await fetch('https://pokeapi.co/api/v2/pokemon?limit=10');
+    const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=20");
     const data = await res.json();
     this.pokemons = data.results;
     this.requestUpdate();
@@ -42,7 +45,7 @@ export class Pokemon extends LitElement {
   async _handlePokemonSelected(event) {
     console.log(event);
     if (event.detail) {
-      const {name} = event.detail;
+      const { name } = event.detail;
       const pokemon = this.pokemons.find((pokemon) => pokemon.name === name);
 
       const response = await this.fetchPokemon(pokemon.url);
@@ -55,7 +58,7 @@ export class Pokemon extends LitElement {
 
   render() {
     return html`
-      <div>
+      <div class="content-wrapper">
         <pokemon-list
           .pokemons=${this.pokemons}
           @poke=${this._handlePokemonSelected}
@@ -70,4 +73,4 @@ export class Pokemon extends LitElement {
   }
 }
 
-customElements.define('pokemon-app', Pokemon);
+customElements.define("pokemon-app", Pokemon);
